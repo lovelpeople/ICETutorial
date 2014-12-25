@@ -31,6 +31,7 @@
 @property (nonatomic, retain) ICETutorialLabelStyle *subTitle;
 @property (nonatomic, retain) NSString *pictureName;
 @property (nonatomic, assign) NSTimeInterval duration;
+@property (nonatomic, strong) UIImage *iconImage;
 
 // Init.
 - (instancetype)initWithTitle:(NSString *)title

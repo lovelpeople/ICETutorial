@@ -16,25 +16,29 @@
     // Init the pages texts, and pictures.
     ICETutorialPage *layer1 = [[ICETutorialPage alloc] initWithTitle:@"Picture 1"
                                                             subTitle:@"Champs-Elysées by night"
-                                                         pictureName:@"tutorial_background_00@2x.jpg"
+                                                         pictureName:@"1"
                                                             duration:3.0];
+    layer1.iconImage = [UIImage imageNamed:@"icon_startanimation1"];
+    
     ICETutorialPage *layer2 = [[ICETutorialPage alloc] initWithTitle:@"Picture 2"
                                                             subTitle:@"The Eiffel Tower with\n cloudy weather"
-                                                         pictureName:@"tutorial_background_01@2x.jpg"
+                                                         pictureName:@"2"
                                                             duration:3.0];
+    layer2.iconImage = [UIImage imageNamed:@"icon_startanimation2"];
+    
     ICETutorialPage *layer3 = [[ICETutorialPage alloc] initWithTitle:@"Picture 3"
                                                             subTitle:@"An other famous street of Paris"
-                                                         pictureName:@"tutorial_background_02@2x.jpg"
+                                                         pictureName:@"3"
                                                             duration:3.0];
+    layer3.iconImage = [UIImage imageNamed:@"icon_startanimation3"];
+    
     ICETutorialPage *layer4 = [[ICETutorialPage alloc] initWithTitle:@"Picture 4"
                                                             subTitle:@"The Eiffel Tower with a better weather"
-                                                         pictureName:@"tutorial_background_03@2x.jpg"
+                                                         pictureName:@"4"
                                                             duration:3.0];
-    ICETutorialPage *layer5 = [[ICETutorialPage alloc] initWithTitle:@"Picture 5"
-                                                            subTitle:@"The Louvre's Museum Pyramide"
-                                                         pictureName:@"tutorial_background_04@2x.jpg"
-                                                            duration:3.0];
-    NSArray *tutorialLayers = @[layer1,layer2,layer3,layer4,layer5];
+    layer4.iconImage = [UIImage imageNamed:@"icon_startanimation4"];
+    
+    NSArray *tutorialLayers = @[layer1,layer2,layer3,layer4];
 
     // Set the common style for the title.
     ICETutorialLabelStyle *titleStyle = [[ICETutorialLabelStyle alloc] init];

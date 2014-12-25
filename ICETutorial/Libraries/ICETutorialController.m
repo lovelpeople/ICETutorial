@@ -70,6 +70,10 @@
 }
 
 - (void)setupView {
+    //we want to animate the image in x-axis, so the image should be bigger than normal one.
+    self.frontLayerView.contentMode = UIViewContentModeScaleAspectFill;
+    self.backLayerView.contentMode = UIViewContentModeScaleAspectFill;
+    
     [self.frontLayerView setFrame:self.view.bounds];
     [self.backLayerView setFrame:self.view.bounds];
     
@@ -97,9 +101,9 @@
     
     // UIButtons.
     [self.leftButton setBackgroundColor:[UIColor darkGrayColor]];
-    [self.rightButton setBackgroundColor:[UIColor darkGrayColor]];
-    [self.leftButton setTitle:@"Button 1" forState:UIControlStateNormal];
-    [self.rightButton setTitle:@"Button 2" forState:UIControlStateNormal];
+    [self.rightButton setBackgroundColor:[UIColor colorWithRed:2 / 255.f green:163 / 255.f blue:247 / 255.f alpha:1]];
+    [self.leftButton setTitle:@"Sign up" forState:UIControlStateNormal];
+    [self.rightButton setTitle:@"Sign in" forState:UIControlStateNormal];
     [self.leftButton addTarget:self
                         action:@selector(didClickOnButton1:)
               forControlEvents:UIControlEventTouchUpInside];
@@ -130,7 +134,7 @@
     // Overlay title.
     [self.overlayTitle setTranslatesAutoresizingMaskIntoConstraints:NO];
     [constraints addObject:@"V:|-116-[_overlayTitle(==50)]"];
-    [constraints addObject:@"H:|-54-[_overlayTitle(==212)]-|"];
+    [constraints addObject:@"H:|-[_overlayTitle]-|"];
     
     // Buttons.
     [self.leftButton setTranslatesAutoresizingMaskIntoConstraints:NO];
