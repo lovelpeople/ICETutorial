@@ -78,15 +78,18 @@
 }
 
 #pragma mark - Styles
+
 - (ICETutorialLabelStyle *)titleStyle {
     if (_titleStyle) {
         return _titleStyle;
     }
     
-    return [[ICETutorialLabelStyle alloc] initWithFont:self.titleFont
-                                             textColor:self.titleColor
-                                           linesNumber:self.titleLinesNumber
-                                                offset:self.titleOffset];
+    ICETutorialLabelStyle *style = [[ICETutorialLabelStyle alloc] initWithFont:self.titleFont
+                                                                     textColor:self.titleColor
+                                                                   linesNumber:self.titleLinesNumber
+                                                                        offset:self.titleOffset];
+    style.subtitle = NO;
+    return style;
 }
 
 - (ICETutorialLabelStyle *)subTitleStyle {
@@ -94,10 +97,12 @@
         return _subTitleStyle;
     }
     
-    return [[ICETutorialLabelStyle alloc] initWithFont:self.subTitleFont
-                                             textColor:self.subTitleColor
-                                           linesNumber:self.subTitleLinesNumber
-                                                offset:self.subTitleOffset];
+    ICETutorialLabelStyle *style = [[ICETutorialLabelStyle alloc] initWithFont:self.subTitleFont
+                                                                     textColor:self.subTitleColor
+                                                                   linesNumber:self.subTitleLinesNumber
+                                                                        offset:self.subTitleOffset];
+    style.subtitle = YES;
+    return style;
 }
 
 @end

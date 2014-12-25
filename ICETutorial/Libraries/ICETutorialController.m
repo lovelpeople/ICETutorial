@@ -18,6 +18,9 @@
 @property (nonatomic, strong, readonly) UIButton *leftButton;
 @property (nonatomic, strong, readonly) UIButton *rightButton;
 
+@property (nonatomic, strong, readonly) UIImageView *overlayIconImageView;
+@property (nonatomic, weak) UIImageView *currentAnimatingImageView;
+
 @property (nonatomic, assign) ScrollingState currentState;
 @property (nonatomic, strong) NSArray *pages;
 @property (nonatomic, assign) NSInteger currentPageIndex;
@@ -64,6 +67,7 @@
     // Overlays.
     [self setOverlayTexts];
     [self setOverlayTitle];
+    [self setupOverlayImages];
     
     // Preset the origin state.
     [self setOriginLayersState];
@@ -271,6 +275,17 @@
 - (void)setOverlayTitle {
     // ...or change by an UIImageView if you need it.
     [self.overlayTitle setText:@"Welcome"];
+    
+    // I don't want to use it, so hide it.
+    self.overlayTitle.hidden = YES;
+}
+
+- (void)setupOverlayImages {
+    int index = 0;
+    for (ICETutorialPage *page in self.pages) {
+        [self overlayImageWithImage:page.iconImage index:index];
+        index++;
+    }
 }
 
 // Setup the Title/Subtitle style/text.
@@ -298,25 +313,50 @@
                   commonStyle:(ICETutorialLabelStyle *)commonStyle
                         index:(NSUInteger)index {
     // SubTitles.
-    UILabel *overlayLabel = [[UILabel alloc] initWithFrame:CGRectMake((index * self.view.frame.size.width),
-                                                                      self.view.frame.size.height - [commonStyle offset],
-                                                                      self.view.frame.size.width,
-                                                                      TUTORIAL_LABEL_HEIGHT)];
+    UILabel *overlayLabel;
+    
+    if (!commonStyle.isSubtitle) {
+        overlayLabel = [[UILabel alloc] initWithFrame:CGRectMake((index * self.view.frame.size.width),
+                                                                 [commonStyle offset],
+                                                                 self.view.frame.size.width,
+                                                                 TUTORIAL_LABEL_HEIGHT)];
+        overlayLabel.font = [UIFont boldSystemFontOfSize:20.f];
+    }
+    else {
+        overlayLabel = [[UILabel alloc] initWithFrame:CGRectMake((index * self.view.frame.size.width) + 20,
+                                                                 [commonStyle offset] - 20,
+                                                                 self.view.frame.size.width - 40,
+                                                                 150)];
+        overlayLabel.font = [UIFont systemFontOfSize:13.f];
+    }
+    
     [overlayLabel setNumberOfLines:[commonStyle linesNumber]];
     [overlayLabel setBackgroundColor:[UIColor clearColor]];
-    [overlayLabel setTextAlignment:NSTextAlignmentCenter];  
+    [overlayLabel setTextAlignment:NSTextAlignmentCenter];
+    [overlayLabel setLineBreakMode:NSLineBreakByCharWrapping];
 
     // Datas and style.
     [overlayLabel setText:[style text]];
-    [style font] ? [overlayLabel setFont:[style font]] :
-                   [overlayLabel setFont:[commonStyle font]];
+//    [style font] ? [overlayLabel setFont:[style font]] :
+//                   [overlayLabel setFont:[commonStyle font]];
     [style textColor] ? [overlayLabel setTextColor:[style textColor]] :
                         [overlayLabel setTextColor:[commonStyle textColor]];
   
     [self.scrollView addSubview:overlayLabel];
 }
 
+- (void)overlayImageWithImage:(UIImage *)image index:(NSUInteger)index {
+    UIImageView *imageView =
+    [[UIImageView alloc] initWithFrame:CGRectMake((index * self.view.frame.size.width) + (CGRectGetWidth(self.view.frame) - 60) / 2,
+                                                  100,
+                                                  60,
+                                                  60)];
+    imageView.image = image;
+    [self.scrollView addSubview:imageView];
+}
+
 #pragma mark - Layers management
+
 // Handle the background layer image switch.
 - (void)setBackLayerPictureWithPageIndex:(NSInteger)index {
     [self setBackgroundImage:self.backLayerView withIndex:index + 1];
@@ -334,7 +374,18 @@
         return;
     } 
     
+    _currentAnimatingImageView = imageView;
     [imageView setImage:[UIImage imageNamed:[self.pages[index] pictureName]]];
+    
+    //animate
+    [UIView animateWithDuration:8
+                          delay:0
+                        options:UIViewAnimationOptionAutoreverse | UIViewKeyframeAnimationOptionRepeat | UIViewAnimationOptionAllowUserInteraction
+                     animations:^{
+        imageView.transform = CGAffineTransformMakeTranslation(50, 0);
+    } completion:^(BOOL finished) {
+    
+    }];
 }
 
 // Setup lapyer's alpha.
@@ -422,6 +473,7 @@
 }
 
 #pragma mark - ScrollView delegate
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     // Get scrolling position, and nextPageindex.
     float scrollingPosition = scrollView.contentOffset.x / self.view.frame.size.width;
@@ -456,6 +508,11 @@
     // At the first user interaction, we disable the auto scrolling.
     if (self.scrollView.isTracking) {
         [self stopScrolling];
+    }
+    
+    //if user is dragging the view, stop animating
+    for (UIView *subview in self.view.subviews) {
+        [subview.layer removeAllAnimations];
     }
 }
 

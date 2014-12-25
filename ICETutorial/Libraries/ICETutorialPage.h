@@ -16,6 +16,7 @@
 @property (nonatomic, retain) UIColor *textColor;
 @property (nonatomic, assign) NSUInteger linesNumber;
 @property (nonatomic, assign) NSUInteger offset;
+@property (nonatomic, assign, getter=isSubtitle) BOOL subtitle;
 
 // Init.
 - (instancetype)initWithText:(NSString *)text;
